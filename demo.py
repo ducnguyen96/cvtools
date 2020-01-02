@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from commons import rotate
+from commons import rotate_remain_bound
 
 if __name__ == "__main__":
     image = cv2.imread("images/idcard.png")
@@ -11,4 +11,6 @@ if __name__ == "__main__":
     # resized = resize_by_size(image, (300, 300), show=True)
     # resized = resize_by_factor(image, 0.5, 0.5, show=True)
     # resized = resize_by_factor(image, 0.5, 0.5, mode="TP")
-    rotated = rotate(image, direction="L", show=True)
+    # rotated = rotate_by_direction(image, direction="L", show=True)
+    # rotated = rotate_by_angle(image, 3, mode="TP")
+    rotated = rotate_remain_bound(image, -3, mode="TP")

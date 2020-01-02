@@ -5,6 +5,7 @@ def nothing():
     pass
 
 def resize_by_size(image, size, mode=None, show=False):
+    "size is a tuple, (300, 300) for example."
     resized = cv2.resize(image, size)
     if show == True:
         cv2.imshow("resize_by_size", resized)
@@ -24,4 +25,28 @@ def resize_by_size(image, size, mode=None, show=False):
 
             resized = cv2.resize(image, (horiz_size, vert_size))
             cv2.imshow("resize_by_size", resized)
+    return resized
+
+def resize_by_factor(image, fx, fy, mode=None, show=False):
+    "fx and fy can be float."
+    "because trackbar have to be int number so I have to set fx,fy equal to 1/100 of their original value in TP mode."
+    resized = cv2.resize(image, (0, 0), fx=fx, fy=fy)
+    if show == True:
+        cv2.imshow("resize_by_factor", resized)
+        cv2.waitKey(0)
+    if mode=="TP":
+        cv2.namedWindow("FACTOR", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow('FACTOR', 400,0)
+        cv2.createTrackbar("FX", "FACTOR",100,200,nothing)
+        cv2.createTrackbar("FY", "FACTOR",100,200,nothing)
+
+        while(1):
+            if cv2.waitKey(1) == ord("q"):
+                cv2.destroyAllWindows()
+
+            fx=cv2.getTrackbarPos("FX", "FACTOR")
+            fy=cv2.getTrackbarPos("FY", "FACTOR")
+
+            resized = cv2.resize(image, (0, 0), fx=fx*0.01, fy=fy*0.01)
+            cv2.imshow("resize_by_factor", resized)
     return resized

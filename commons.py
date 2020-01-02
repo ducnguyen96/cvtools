@@ -10,7 +10,7 @@ def resize_by_size(image, size, mode=None, show=False):
     if show == True:
         cv2.imshow("resize_by_size", resized)
         cv2.waitKey(0)
-    if mode=="TP":
+    if mode == "TP":
         cv2.namedWindow("SIZE", cv2.WINDOW_NORMAL)
         cv2.resizeWindow('SIZE', 400,0)
         cv2.createTrackbar("VERT_SIZE", "SIZE",10,1280,nothing)
@@ -34,7 +34,7 @@ def resize_by_factor(image, fx, fy, mode=None, show=False):
     if show == True:
         cv2.imshow("resize_by_factor", resized)
         cv2.waitKey(0)
-    if mode=="TP":
+    if mode == "TP":
         cv2.namedWindow("FACTOR", cv2.WINDOW_NORMAL)
         cv2.resizeWindow('FACTOR', 400,0)
         cv2.createTrackbar("FX", "FACTOR",100,200,nothing)
@@ -50,3 +50,17 @@ def resize_by_factor(image, fx, fy, mode=None, show=False):
             resized = cv2.resize(image, (0, 0), fx=fx*0.01, fy=fy*0.01)
             cv2.imshow("resize_by_factor", resized)
     return resized
+
+def rotate(image, direction, show=False):
+    if direction == "R":
+        rotated = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    if direction == "L":
+        rotated = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+    if direction == "UD":
+        rotated = cv2.rotate(image, cv2.ROTATE_180)
+        
+    if show == True:
+        cv2.imshow("rotate", rotated)
+        cv2.waitKey(0)
+    return rotated
+

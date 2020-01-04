@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
 
-from commons import color_segment
+from tools import color_segment, padding, detect_houghlines
 
-def nothing():
-    pass
+from commons import auto_canny
+
+from morphologic import erode
 
 if __name__ == "__main__":
     image = cv2.imread("images/idcard.png")
@@ -19,4 +20,10 @@ if __name__ == "__main__":
     # rotated = rotate_by_angle(image, 3, mode="TP")
     # rotated = rotate_remain_bound(image, -3, mode="TP")
 
-    color_segment(image, mode="TP")
+    mask = color_segment(image, show=False)
+    padded = padding(mask, 10, 10, 10, 10, show=False)
+    edges = auto_canny(padded, show=True)
+
+    detect_houghlines(edges, mode="TP")
+
+    # erode(edges, mode="TP")

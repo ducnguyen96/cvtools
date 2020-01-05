@@ -20,27 +20,33 @@ rotate_remain_bound(image, -3, show=True)
 resize_by_size(image, mode="TP")
 ```
 ![](./assets/resize_by_size.gif)
+
 2. resize_by_factor
 ```python
 resize_by_factor(image, mode="TP")
 ```
 ![](./assets/resize_by_factor.gif)
+
 3. rotate_by_direction
+
 4. rotate_by_angle
 ```python
 rotate_by_angle(image, mode="TP")
 ```
 ![](./assets/rotate_by_angle.gif)
+
 5. rotate_remain_bound
 ```python
 rotate_remain_bound(image, mode="TP")
 ```
 ![](./assets/rotate_remain_bound.gif)
+
 6. color_segment
 ```python
 color_segment(image, mode="TP")
 ```
 ![](./assets/color_segment.gif)
+
 7. erode
 ```python
 mask = color_segment(image)
@@ -49,6 +55,7 @@ edges = auto_canny(padded, show=True)
 erode(edges, mode="TP")
 ```
 ![](./assets/erode.gif)
+
 8. detect_houghlines
 ```python
 mask = color_segment(image)
@@ -57,6 +64,7 @@ edges = auto_canny(padded, show=True)
 detect_houghlines(edges, mode="TP")
 ```
 ![](./assets/detect_houghlines.gif)
+
 9. perspective_transform
 
 ```python

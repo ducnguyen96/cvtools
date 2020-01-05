@@ -3,24 +3,29 @@ import numpy as np
 
 def click_event(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
-        print(x,', ' ,y)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        strXY = str(x) + ', '+ str(y)
-        cv2.putText(img, strXY, (x, y), font, .5, (255, 255, 0), 2)
-        cv2.imshow('image', img)
-    if event == cv2.EVENT_RBUTTONDOWN:
-        blue = img[y, x, 0]
-        green = img[y, x, 1]
-        red = img[y, x, 2]
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        strBGR = str(blue) + ', '+ str(green)+ ', '+ str(red)
-        cv2.putText(img, strBGR, (x, y), font, .5, (0, 255, 255), 2)
-        cv2.imshow('image', img)
+        cv2.circle(image, (x, y), 2, (0, 0, 255), 2)
+        cv2.imshow('image', image)
+        coords.append(x)
+        coords.append(y)
 
-#img = np.zeros((512, 512, 3), np.uint8)
-img = cv2.imread('images/idcard.png')
-cv2.imshow('image', img)
+image = cv2.imread('images/idcard2.jpg')
+cv2.imshow("image", image)
 
+coords = []
 cv2.setMouseCallback('image', click_event)
 cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+print(coords)
+
+coordx1, coordy1, coordx2, coordy2, coordx3, coordy3, coordx4, coordy4 = coords
+
+pts1 = np.float32([[coordx1, coordy1], [coordx2, coordy2], [coordx3, coordy3], [coordx4, coordy4]])
+pts2 = np.float32([[0, 0], [coordx2-coordx1, 0], [0, coordy3-coordy1], [coordx2-coordx1, coordy3-coordy1]])
+
+matrix = cv2.getPerspectiveTransform(pts1, pts2)
+result = cv2.warpPerspective(image, matrix, (coordx2-coordx1, coordy3-coordy1))
+
+result = cv2.resize(result, (0, 0), fx=2, fy=2)
+
+cv2.imshow("result", result)
+cv2.waitKey(0)

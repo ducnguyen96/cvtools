@@ -4,7 +4,7 @@ import numpy as np
 def nothing():
     pass
 
-def resize_by_size(image, size, mode=None, show=False):
+def resize_by_size(image, size=(300, 300), mode=None, show=False):
     # size is a tuple, (300, 300) for example.
     resized = cv2.resize(image, size)
     if show == True:
@@ -12,9 +12,9 @@ def resize_by_size(image, size, mode=None, show=False):
         cv2.waitKey(0)
     if mode == "TP":
         cv2.namedWindow("SIZE", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('SIZE', 400,0)
-        cv2.createTrackbar("VERT_SIZE", "SIZE",10,1280,nothing)
-        cv2.createTrackbar("HORIZ_SIZE", "SIZE",10,1280,nothing)
+        cv2.resizeWindow('SIZE', 350,0)
+        cv2.createTrackbar("VERT_SIZE", "SIZE",100,1280,nothing)
+        cv2.createTrackbar("HORIZ_SIZE", "SIZE",100,1280,nothing)
 
         while(1):
             if cv2.waitKey(1) == ord("q"):
@@ -27,7 +27,7 @@ def resize_by_size(image, size, mode=None, show=False):
             cv2.imshow("resize_by_size", resized)
     return resized
 
-def resize_by_factor(image, fx, fy, mode=None, show=False):
+def resize_by_factor(image, fx=1, fy=1, mode=None, show=False):
     # fx and fy can be float.
     # because trackbar have to be int number so I have to set fx,fy equal to 1/100 of their original value in TP mode.
     resized = cv2.resize(image, (0, 0), fx=fx, fy=fy)
@@ -36,9 +36,9 @@ def resize_by_factor(image, fx, fy, mode=None, show=False):
         cv2.waitKey(0)
     if mode == "TP":
         cv2.namedWindow("FACTOR", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('FACTOR', 400,0)
-        cv2.createTrackbar("FX", "FACTOR",100,200,nothing)
-        cv2.createTrackbar("FY", "FACTOR",100,200,nothing)
+        cv2.resizeWindow('FACTOR', 350,0)
+        cv2.createTrackbar("FX", "FACTOR",10,200,nothing)
+        cv2.createTrackbar("FY", "FACTOR",10,200,nothing)
 
         while(1):
             if cv2.waitKey(1) == ord("q"):
@@ -67,7 +67,7 @@ def rotate_by_direction(image, direction, show=False):
         cv2.waitKey(0)
     return rotated
 
-def rotate_remain_bound(image, angle, mode=None, show=False):
+def rotate_remain_bound(image, angle=20, mode=None, show=False):
     # grab the dimensions of the image and then determine the center
     (h, w) = image.shape[:2]
     (cX, cY) = (w / 2, h / 2)
@@ -94,7 +94,7 @@ def rotate_remain_bound(image, angle, mode=None, show=False):
 
     if mode == "TP":
         cv2.namedWindow("ANGLE", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('ANGLE', 400,0)
+        cv2.resizeWindow('ANGLE', 350,0)
         cv2.createTrackbar("angle", "ANGLE",0,360,nothing)
 
         while(1):
@@ -126,7 +126,7 @@ def multiple_color_spaces(image):
     cv2.imshow("LAB", LAB)
     cv2.waitKey(0)
     
-def rotate_by_angle(image, angle, mode=None, show=False):
+def rotate_by_angle(image, angle=20, mode=None, show=False):
     # grab the dimensions of the image
     (h, w) = image.shape[:2]
 
@@ -142,7 +142,7 @@ def rotate_by_angle(image, angle, mode=None, show=False):
     
     if mode == "TP":
         cv2.namedWindow("ANGLE", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('ANGLE', 400,0)
+        cv2.resizeWindow('ANGLE', 350,0)
         cv2.createTrackbar("angle", "ANGLE",0,360,nothing)
 
         while(1):
@@ -267,3 +267,18 @@ def detect_houghlines(edges, threshold=70, rho=0.8, minLineLength=400, mode=None
             canvas = np.zeros_like(edges)
 
     return houghlines
+
+def perspective_transform(image, coords, show=False):
+    coordx1, coordy1, coordx2, coordy2, coordx3, coordy3, coordx4, coordy4 = coords
+
+    pts1 = np.float32([[coordx1, coordy1], [coordx2, coordy2], [coordx3, coordy3], [coordx4, coordy4]])
+    pts2 = np.float32([[0, 0], [coordx2-coordx1, 0], [0, coordy3-coordy1], [coordx2-coordx1, coordy3-coordy1]])
+
+    matrix = cv2.getPerspectiveTransform(pts1, pts2)
+    result = cv2.warpPerspective(image, matrix, (coordx2-coordx1, coordy3-coordy1))
+
+    if show == True:
+        cv2.imshow("result", result)
+        cv2.waitKey(0)
+
+    return result
